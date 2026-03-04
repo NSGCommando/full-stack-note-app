@@ -16,3 +16,10 @@ class CustomHeaders(Enum):
     """
     CUSTOM_HEADER_FRONTEND="R-Application-Service"
     CUSTOM_HEADER_FRONTEND_RESPONSE="Frontend-Service-R"
+
+class RegexPatterns(Enum):
+    """
+    Class to store regex patterns used for username/password validation
+    """
+    USERNAME_PATTERN=r"[a-zA-Z0-9]{5,10}"
+    PASSWORD_PATTERN=r"\S{8,20}"
