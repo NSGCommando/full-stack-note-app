@@ -5,6 +5,9 @@ from backend.table_class import UserData
 from backend.backend_functions import hash_passwords
 from backend.backend_constants import BackendPaths
 from dotenv import load_dotenv
+from backend.project_logger import get_project_logger
+
+logger=get_project_logger()
 
 load_dotenv()
 
@@ -14,6 +17,7 @@ def database_close(engine:Engine):
     SQLite WAL files to the main database.
     """
     if engine:engine.dispose()
+    logger.info("Successfully disposed all session engines")
 
 def initialize_database(test_mode=False):
     """
@@ -27,6 +31,7 @@ def initialize_database(test_mode=False):
     engine = session_factory.bind
     # guarantee that engine is Engine object
     if not isinstance(engine, Engine):
+        logger.error(f"Engine initialization failed for {path}")
         raise RuntimeError(f"Engine initialization failed for {path}")
     if test_mode: # clear data if in testing mode
         UserBase.metadata.drop_all(bind=engine)
@@ -47,4 +52,4 @@ def initialize_database(test_mode=False):
     database_close(engine)
 
 if __name__ == "__main__":
-    initialize_database()
+    initialize_database()    

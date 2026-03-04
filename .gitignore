@@ -10,6 +10,7 @@ backend/.env
 backend/*.db
 backend/*.wal
 backend/*.shm
+logs/
 
 # OS files
 .DS_Store
