@@ -37,7 +37,9 @@ def initialize_database(test_mode=False):
         UserBase.metadata.drop_all(bind=engine)
     UserBase.metadata.create_all(bind=engine)
     # admin data
-    password_hash = hash_passwords(os.getenv('ADMIN_KEY'))
+    secret_key = os.getenv('ADMIN_KEY')
+    assert secret_key is not None
+    password_hash = hash_passwords(secret_key)
     admin_name = os.getenv('ADMIN_USERNAME')
     with session_factory() as session:
         existing_admin = session.query(UserData).filter_by(user_name=admin_name).first()

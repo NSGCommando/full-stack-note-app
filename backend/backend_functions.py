@@ -13,7 +13,7 @@ def confirm_password(hash, password)->bool:
     """
     return check_password_hash(hash,password)
 
-def hash_passwords(password_passed)->str:
+def hash_passwords(password_passed:str)->str:
     """Wrapper to generate and return password hash
     Currently uses scrypt with work factor of 600,000 from werkzeug for production
     Uses PBKDF2 with work factor of only 1000 to test database bottlenecking"""
