@@ -22,7 +22,7 @@ A simple app to allow users to save notes and view them later
         - `password`: string, stores hashed password
         - `is_admin`: boolean value, denotes role status (user/admin)
 
-   - **UserNotes**:
+    - **UserNotes**:
       - Stores data for individual notes 
       - user_id rerefences UserData[id] for each note's ownership
       - Fields:
