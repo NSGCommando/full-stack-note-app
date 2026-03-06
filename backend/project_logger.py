@@ -42,17 +42,20 @@ def get_project_logger(level=logging.INFO):
     
     if not logger.hasHandlers():  # Prevent adding multiple handlers if imported multiple times
         logger.setLevel(level)
+        logger.propagate = False
         
         # File handler
         file_handler = logging.FileHandler(log_path)
         # set formatter with autofill default variables
         file_formatter = logging.Formatter("%(asctime)s [%(levelname)s] [%(module)s] %(message)s")
         file_handler.setFormatter(file_formatter)
+        file_handler.setLevel(level)
         logger.addHandler(file_handler)
         
         # Console handler
         console_handler = logging.StreamHandler()
         console_handler.setFormatter(file_formatter)
+        console_handler.setLevel(logging.WARNING) # Only WARNING or higher level logs are printed to console
         logger.addHandler(console_handler)
 
     return logger
