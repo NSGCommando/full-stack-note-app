@@ -18,3 +18,6 @@ Thumbs.db
 
 # Test results
 testing/backend/results/
+
+# workspace files
+*.code-workspace
