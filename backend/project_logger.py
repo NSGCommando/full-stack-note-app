@@ -32,7 +32,9 @@ def get_project_logger(level:logging._Level=logging.INFO)->logging.Logger:
     Logging level default is INFO, pass logging.WARNING or other levels to change at call
     """
     # Determine calling fn's filename
-    caller_file = get_caller_filename() 
+    caller_file = get_caller_filename(2) # get the fn name that called the logger
+    if caller_file is None:
+        raise RuntimeError(f"Cannot determine Module Name for get_project_logger from {__file__}")
     module_name = os.path.splitext(os.path.basename(caller_file))[0]
     log_filename = module_name + ".log"
     log_path = os.path.join(log_dir,log_filename)
