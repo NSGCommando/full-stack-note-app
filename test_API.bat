@@ -13,5 +13,6 @@ echo running tests
 timeout /t 10
 
 @echo off
-call .venv\Scripts\activate.bat && python testing/backend/test_API.py
+REM: -v : set pytest verbosity, for individual test name and status
+call .venv\Scripts\activate.bat && pytest -v testing/backend/test_API_pytest.py
 pause
