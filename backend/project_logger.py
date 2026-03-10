@@ -9,7 +9,8 @@ Usage:
     logger = get_project_logger(?Level=logging.[INFO|WARNING|ERROR])
     logger.info("Some message")
 """
-import logging, os, inspect
+import logging, os
+from backend.backend_functions import get_caller_filename
 
 # Start from this file's location
 current_file = os.path.abspath(__file__)  # full path to this logger file
@@ -25,13 +26,13 @@ if not os.path.exists(backend_dir):
 # Ensure the folder exists
 os.makedirs(log_dir, exist_ok=True)
 
-def get_project_logger(level=logging.INFO):
+def get_project_logger(level:logging._Level=logging.INFO)->logging.Logger:
     """
     Returns a logger that logs to both console and a file named after the caller module.
     Logging level default is INFO, pass logging.WARNING or other levels to change at call
     """
-    # Determine the calling file name
-    caller_file = inspect.stack()[1].filename
+    # Determine calling fn's filename
+    caller_file = get_caller_filename() 
     module_name = os.path.splitext(os.path.basename(caller_file))[0]
     log_filename = module_name + ".log"
     log_path = os.path.join(log_dir,log_filename)
