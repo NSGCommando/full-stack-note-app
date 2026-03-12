@@ -1,4 +1,4 @@
-import {useState,useEffect} from "react";
+import {useState,useEffect,useRef} from "react";
 import { useNavigate } from "react-router-dom";
 import { customHeader,HOST } from "../utils/authUtils";
 import TextInput from "../components/TextInput";
@@ -10,11 +10,15 @@ function UserDashboard({user,setUser}){
     const [error, setError] = useState("");
     const [showNoteInput, setShowNoteInput] = useState(false);
     const [newNote, setNewNote] = useState("");
+    const fetchOnLogin = useRef(false);
 
-    // load pre-existing notes list on mount
+    // load pre-existing notes list on user confirmation once after login
     useEffect(() => {
-        handleNotesRefresh();
-        }, []); // run once on mount
+        if(user && !user.is_admin && !fetchOnLogin.current) {
+            handleNotesRefresh();
+            fetchOnLogin.current = true; // Use a reference to main initial note-loading idempotent to retries
+        }
+        }, [user]); // run once on user state change
 
     // navigate hook
     const navigateObject = useNavigate();
@@ -98,7 +102,7 @@ function UserDashboard({user,setUser}){
                 <div id="user-note-add">
                 {showNoteInput && (
                     <form id="new-note-form" onSubmit={handleAddNote}>
-                        <TextInput tclassName="text-input"
+                        <TextInput className="text-input"
                         id="note_input"
                         label="new_note"
                         type="text"

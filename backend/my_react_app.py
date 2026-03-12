@@ -57,6 +57,7 @@ def login(data,session):
     
     access_token = create_access_token(identity=str(user.id))
     response = jsonify({
+        "message": "Login is successful",
         "username": username,
         "is_admin": user.is_admin
     })
