@@ -87,7 +87,7 @@ A simple app to allow users to save notes and view them later. It can be easily 
 - Alternatively, you can run the entire app via Docker.
 - Install Docker Engine and Docker Compose CLI Plugin:
   - Windows has several apps available that do everything at once. For example, Docker Desktop; go to `https://www.docker.com/` to download and install Docker Desktop
-  - Linux users just need the `docker -ce` and `dockerc-compose-plugin` packages to get it working
+  - Linux users just need the `docker -ce` and `docker-compose-plugin` packages to get it working
 - Confirm Docker is installed via `docker  --version`
 - Once confirmed, run the compose build via `docker-compose up --build` from the project root
 - The Dockerized app runs on Nginx instead of Vite, so the UI will be available on `localhost:8000` if running via Docker
