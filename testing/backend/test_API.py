@@ -59,7 +59,7 @@ def gen_bad_data():
 # signup test
 def test_signup(session_manager):
     """Test to validate signup route logic.
-    APIs tested: /check_username, /signup"""
+    APIs tested: /api/check_username, /api/signup"""
     # extract from fixture
     session = session_manager["session"]
     # generate signup data
@@ -69,28 +69,26 @@ def test_signup(session_manager):
     signup_dummy_user_data = {"username":signup_username,"password":signup_password}
     signup_check_data = {"username":signup_dummy_user_data["username"]}
     # check username availability
-    signup_check_username = session.post(f"{API_URL}/check_username",json=signup_check_data)
+    signup_check_username = session.post(f"{API_URL}/api/check_username",json=signup_check_data)
     assertion_wrapper(signup_check_username,200)
     print("\nSignup username check response:",signup_check_username.json())
     # actual signup API hit
     signup_data = signup_dummy_user_data
-    signup_request = session.post(f"{API_URL}/signup",json=signup_data)
+    signup_request = session.post(f"{API_URL}/api/signup",json=signup_data)
     assertion_wrapper(signup_request,201)
-    # print("\nSignup response:",signup_request.json())
 
 # login test
 def test_login(session_manager):
     """Test to confirm login API.
-    API Tested: /login"""
+    API Tested: /api/login"""
     session = session_manager["session"]
     username = generate_random_username_valid()
     password = f"test_password{os.urandom(2).hex()}"
     login_data = {"username":username,"password":password}
-    session.post(f"{API_URL}/signup",json=login_data)
-    login_request = session.post(f"{API_URL}/login",json=login_data)
+    session.post(f"{API_URL}/api/signup",json=login_data)
+    login_request = session.post(f"{API_URL}/api/login",json=login_data)
     assertion_wrapper(login_request,200)
-    # print("\nLogin response:",login_request.json())
-    session.get(f"{API_URL}/logout")
+    session.get(f"{API_URL}/api/logout")
 
 # auth test for delete action
 def test_delete(session_manager):
@@ -100,13 +98,12 @@ def test_delete(session_manager):
     username = generate_random_username_valid()
     password = f"test_password{os.urandom(2).hex()}"
     login_data = {"username":username,"password":password}
-    session.post(f"{API_URL}/signup",json=login_data)
-    session.post(f"{API_URL}/login",json=login_data)
+    session.post(f"{API_URL}/api/signup",json=login_data)
+    session.post(f"{API_URL}/api/login",json=login_data)
     user_data = {"username":username}
     delete_request = session.delete(f"{API_URL}/api/users",json=user_data)
     assertion_wrapper(delete_request,403)
-    # print("\nDelete response:",delete_request.json())
-    session.get(f"{API_URL}/logout")
+    session.get(f"{API_URL}/api/logout")
 
 # logout test for users
 def test_logout(session_manager):
@@ -116,30 +113,28 @@ def test_logout(session_manager):
     username = generate_random_username_valid()
     password = f"test_password{os.urandom(2).hex()}"
     login_data = {"username":username,"password":password}
-    session.post(f"{API_URL}/signup",json=login_data)
-    session.post(f"{API_URL}/login",json=login_data)
-    logout_request=session.get(f"{API_URL}/logout")
+    session.post(f"{API_URL}/api/signup",json=login_data)
+    session.post(f"{API_URL}/api/login",json=login_data)
+    logout_request=session.get(f"{API_URL}/api/logout")
     assertion_wrapper(logout_request,200)
-    # print("\nLogout response:",logout_request.json())
 
 def test_bad_data_username(session_manager,gen_bad_data):
     """Test for bad username validation rule"""
     session = session_manager["session"]
     # invalid data signup checks
     bad_check_data_username = {"username":gen_bad_data["bad_username"]}
-    bad_signup_check_username = session.post(f"{API_URL}/check_username",json=bad_check_data_username)
+    bad_signup_check_username = session.post(f"{API_URL}/api/check_username",json=bad_check_data_username)
     assertion_wrapper(bad_signup_check_username,400) # reject bad username
-    # print("\nBad Username Check Username response:",bad_signup_check_username.json())
     
 def test_bad_data_password(session_manager,gen_bad_data):
     """Test for bad password validation rule"""
     session = session_manager["session"]
     username_2 = generate_random_username_valid()
     bad_check_data_password = {"username":username_2,"password":gen_bad_data["bad_password"]}
-    bad_signup_check_password = session.post(f"{API_URL}/check_username",json=bad_check_data_password)
+    bad_signup_check_password = session.post(f"{API_URL}/api/check_username",json=bad_check_data_password)
     assertion_wrapper(bad_signup_check_password,200) # accept valid username
     bad_data_username = {"username":username_2,"password":gen_bad_data["bad_password"]}
-    bad_signup_request_password = session.post(f"{API_URL}/signup",json=bad_data_username)
+    bad_signup_request_password = session.post(f"{API_URL}/api/signup",json=bad_data_username)
     assertion_wrapper(bad_signup_request_password,400) # reject bad password
     # print("\nBad Signup Check Password response:",bad_signup_request_password.json())
 
@@ -151,6 +146,6 @@ def test_malicious_attacker(session_manager):
     password_hacker = f"test_password{os.urandom(2).hex()}" 
     user_data_hacker = {"username":username_hacker,"password":password_hacker}
     signup_data_hacker = user_data_hacker
-    signup_request_hacker = session.post(f"{API_URL}/signup",json=signup_data_hacker)
+    signup_request_hacker = session.post(f"{API_URL}/api/signup",json=signup_data_hacker)
     assertion_wrapper(signup_request_hacker,403)
     # print("\nHacker Signup response:",signup_request_hacker.json())

@@ -22,7 +22,7 @@ class SetupTasks(SequentialTaskSet):
             return
         assert isinstance(self.user, User)
         # check name availability if not signed up
-        with self.client.post("/check_username",json={"username":self.user.username},catch_response=True) as response:
+        with self.client.post("/api/check_username",json={"username":self.user.username},catch_response=True) as response:
             if response.status_code!=200:
                 response.failure(f"Username validation failed: {response.status_code}")
             else:
@@ -35,7 +35,7 @@ class SetupTasks(SequentialTaskSet):
             return
         assert isinstance(self.user, User)
         self.res_body = {"username":self.user.username,"password":self.user.password}
-        with self.client.post("/signup", json=self.res_body, catch_response=True) as response:
+        with self.client.post("/api/signup", json=self.res_body, catch_response=True) as response:
             if response.status_code != 201:
                 response.failure(f"Signup failed: {response.status_code}")
             else:
@@ -50,7 +50,7 @@ class UserFlow(SequentialTaskSet):
     def login(self):
         assert isinstance(self.user, User)
         self.res_body = {"username":self.user.username,"password":self.user.password}
-        with self.client.post("/login",json=self.res_body,catch_response=True) as response:
+        with self.client.post("/api/login",json=self.res_body,catch_response=True) as response:
             if response.status_code != 200:
                 response.failure(f"Signup failed: {response.status_code}")
             else:
@@ -59,7 +59,7 @@ class UserFlow(SequentialTaskSet):
     @task
     def logout(self):
         assert isinstance(self.user, User)
-        with self.client.get("/logout",catch_response=True) as response:
+        with self.client.get("/api/logout",catch_response=True) as response:
             if response.status_code!=200:
                 response.failure(f"Logout failed: {response.status_code}")
             else:
