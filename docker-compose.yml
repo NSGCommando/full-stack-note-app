@@ -24,6 +24,7 @@ services:
       - ./backend/.env
     volumes:
       # Format: [Host Path on Windows] : [Path inside Container]
+      # Mirror the database paths so docker can persist changes to disk and load changed data from disk
       - ./backend/data:/flask_app/backend/data
     # Nginx talks to it internally on port 5000, no need to map to localhost
     expose:

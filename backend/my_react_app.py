@@ -174,7 +174,7 @@ def add_new_note(data, session):
 @application.route("/api/user-view-notes",methods=["GET"])
 @jwt_required()
 @qh.data_conn
-def view_notes(data, session):
+def view_notes(session, **data):
     user_id=int(get_jwt_identity())
     # By default returns notes for specific user_id, so ownership check not needed again
     user_notes=qh.view_user_notes(session,user_id)
