@@ -37,7 +37,7 @@ function AdminDashboard({user:adminUser,setUser}){
     async function deleteUser(targetID){
         // handle user deletion
         try{
-            const response = await fetch(`${HOST}/api/users`,{
+            const response = await fetch(`${HOST}/api/users-delete`,{
                                             method:"DELETE", 
                                             headers:{"Content-Type":"application/json",
                                                     [customHeader.CUSTOM_HEADER_FRONTEND]: customHeader.CUSTOM_HEADER_FRONTEND_RESPONSE

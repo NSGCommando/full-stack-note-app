@@ -101,7 +101,7 @@ def get_users(session,**kwargs):
             }), 200
 
 # route: ADMIN: delete an user
-@application.route("/api/users",methods=["DELETE"])
+@application.route("/api/users-delete",methods=["DELETE"])
 @jwt_required()
 @qh.data_conn
 def delete_user(data, session):
