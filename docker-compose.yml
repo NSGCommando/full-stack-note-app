@@ -26,6 +26,18 @@ services:
       # Format: [Host Path on Windows] : [Path inside Container]
       # Mirror the database paths so docker can persist changes to disk and load changed data from disk
       - ./backend/data:/flask_app/backend/data
+    depends_on: # wait for database container to complete
+      db_setup:
+        condition: service_completed_successfully
     # Nginx talks to it internally on port 5000, no need to map to localhost
     expose:
       - "5000"
+
+  db_setup: # ensure database is setup before running servers
+    container_name: database-builder
+    image: note-app-backend
+    command: python backend/database_init.py
+    volumes:
+      - ./backend/data:/flask_app/backend/data
+    env_file:
+      - ./backend/.env

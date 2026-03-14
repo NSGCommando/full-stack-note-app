@@ -37,28 +37,30 @@ A simple app to allow users to save notes and view them later. It can be easily 
     - This logger utility provides per-module log capability with customizable log location (default is`backend/logs/`) and logging level options.
     - Unit tests for the backend use the logger to generate logs at `testing/backend/logs/`
 
-- Authentication and Authorisation
-  - User authentication done via JWT stored client-side for stateless backend
-  - JWTs are stored in HTTP only cookies to prevent token theft via cross-site scripting(XSS) attacks
+- Authentication and Security
+  - User authentication done via JWT stored client-side for stateless backend and JWTs are stored in HTTP only cookies to prevent token theft via cross-site scripting(XSS) attacks
   - Logout request from client-side prompts the server to delete the associated JWT cookie
   - Tokens set the cookie's SameSite setting to Lax to ensure the cookie isn't attached to cross-site request forgery(CSRF) attacks
   - Backend also expects a custom header and header value (set inside ```backend_constants.py```) to accept any requests; this further hardens the app against CSRF attacks.
   - CORS is set up to accept that particular custom header alongside the default ```Content-Type``` header
   - In the case of Admin actions, even if user is authenticated, backend will query database for role data to ensure authorisation for the action
   - Trades off some performance for up-to-date role data and prevents stale authorisation data
+  - Notes feature uses the logged-in User's JWT("user_id" claim) to access correct notes, so no requirement to check ownership again
+  - Backend's API "/api/user-view-notes" extracts the user_id from JWT and uses it to retrieve only the user's notes
+  - Users cannot therefore access other users' notes
+  - JWT Blocklist implemented in-memory via custom class, logout route adds JWT ID to blocklist instance
   - Username and password restrictions have been set up using HTML5 regex patterns on frontend and Python's Regular Expression (RE) library on backend
   - App.jsx is handler for client-side auth and the source of truth for relevant user data, no data is additionally passed to navigation objects
   - SQLAlchemy is used to ensure the app is database-agnostic and allows easy switching of database platforms
   - Query abstraction for type safety and forced parameterization to prevent SQL Injection
   - Uses SQLite's Write Ahead Logging (WAL) mode to allow concurrent database access, significantly improving scalability and load-bearing resilience
-  - Notes feature uses the logged-in User's JWT("user_id" claim) to access correct notes, so no requirement to check ownership again
-  - Backend's API "/api/user-view-notes" extracts the user_id from JWT and uses it to retrieve only the user's notes
-  - Users cannot therefore access other users' notes
+  
 
 ## Initial Setup ##
 - Example database admin details and secret key for token signing provided in `.env.example`
 - Rename it to `.env` and change the data to your preference
-- Since the database doesn't exist at first, run `database_init.bat` batch file to generate the database; the script adds your admin details to the database
+- If running from local repository, run `database_init.bat` batch file to manually generate the database; the script adds your admin details to the database
+- No need to manually call the batch script if running in Docker via `docker-compose.yml`, the compose with automatically create the database if required
 
 ## Usage ##
 - Open React.js UI by navigating to `http://localhost:5713`
