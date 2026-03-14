@@ -20,6 +20,8 @@ frontend/.eslintcache
 backend/*.db
 backend/*.wal
 backend/*.shm
+**/.env
+**/.env.example
 backend/data
 logs/
 .pytest**

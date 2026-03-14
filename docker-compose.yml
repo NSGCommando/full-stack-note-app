@@ -20,6 +20,8 @@ services:
     build:
       context: .
       dockerfile: backend/dockerfile
+    env_file:
+      - ./backend/.env
     volumes:
       # Format: [Host Path on Windows] : [Path inside Container]
       - ./backend/data:/flask_app/backend/data
