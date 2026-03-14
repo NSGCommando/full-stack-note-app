@@ -14,4 +14,4 @@ COPY testing/backend/ ./testing/backend
 
 ENV PYTHONPATH=/flask_app
 EXPOSE 5000
-CMD ["python", "backend/my_react_app.py"]
+CMD ["python","-m", "backend.my_react_app"]

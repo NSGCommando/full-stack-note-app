@@ -3,7 +3,7 @@ from sqlalchemy import Engine
 from pathlib import Path
 from backend.database_connect import get_session_factory, UserBase
 from backend.table_class import UserData
-from backend.backend_functions import hash_passwords
+from backend.backend_functions import hash_passwords, database_close
 from backend.backend_constants import BackendPaths
 from dotenv import load_dotenv
 from backend.project_logger import get_project_logger
@@ -29,14 +29,6 @@ def seed_admin(session_factory):
             )
             session.add(new_admin)
             session.commit()
-
-def database_close(engine:Engine):
-    """
-    Closes all connections in the pool and merges 
-    SQLite WAL files to the main database.
-    """
-    if engine:engine.dispose()
-    logger.info("Successfully disposed all session engines")
 
 def initialize_database(test_mode=False):
     """

@@ -4,8 +4,7 @@ from flask import Flask, jsonify
 from flask_jwt_extended import JWTManager, get_jwt, create_access_token, jwt_required, set_access_cookies, get_jwt_identity, unset_access_cookies
 from datetime import timedelta
 from flask_cors import CORS
-from backend.cache_implement import blacklist_cache
-import logging, os, backend.backend_functions as bf, backend.backend_constants as bc, backend.query_handler as qh
+import logging, os, sys, signal, backend.backend_functions as bf, backend.backend_constants as bc, backend.query_handler as qh
 from backend.project_logger import get_project_logger
 from backend.cache_implement.blacklist_cache import BlacklistCache
 # Setup JWT blacklister and cleaner thread
@@ -215,5 +214,26 @@ def remove_session(exception=None):
     # obtain the request cache from the query handler and wipe all factory sessions for this thread
     qh.remove_cached_sessions()
 
+def handle_shutdowns(sig, frame):
+    """A shutdown function to handle both dev SIGNIT and docker signals (SIGTERM, SIGQUIT)"""
+    app_logger.info("[INFO] Shutdown signal received. Cleaning up...")
+    qh.shutdown_sessions()
+    app_logger.info("[INFO] Session shut down. Exiting.")
+    sys.exit(0)
+
+# catch the SIQUIT from Linux distros
+signals_to_catch = ["SIGINT", "SIGTERM", "SIGQUIT"]
+for sig_name in signals_to_catch:
+    # Check if the current OS actually supports this signal
+    if hasattr(signal, sig_name):
+        sig_num = getattr(signal, sig_name)
+        signal.signal(sig_num, handle_shutdowns)
+        app_logger.info(f"[info] Registered handler for {sig_name}")
+    else:
+        # This will trigger on Windows for SIGQUIT, but stay silent in Docker
+        app_logger.info(f"[info] {sig_name} not supported on this OS. Skipping.")
+
 if __name__=="__main__":
-    application.run(debug=True,host='0.0.0.0')
+    application.run(debug=True,host='0.0.0.0',use_reloader=False) # the reloader starts a second Flask process
+    # This process causes issues if Docker tries to shutdown as the signal won't be passed to the App's process
+    # and the reloader will hard shutdown the app,

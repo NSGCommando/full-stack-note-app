@@ -15,6 +15,8 @@ services:
 
   # The backend service (Flask)
   backend:
+    stop_signal: SIGINT
+    stop_grace_period: 10s
     container_name: note-app-backend
     image: note-app-backend
     build:
@@ -36,7 +38,7 @@ services:
   db_setup: # ensure database is setup before running servers
     container_name: database-builder
     image: note-app-backend
-    command: python backend/database_init.py
+    command: python -m backend.database_init
     volumes:
       - ./backend/data:/flask_app/backend/data
     env_file:

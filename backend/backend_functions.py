@@ -1,5 +1,6 @@
 import inspect
 from typing import Dict
+from sqlalchemy import Engine
 from sqlalchemy.orm import Session
 from werkzeug.security import generate_password_hash, check_password_hash
 from backend.query_handler import get_user
@@ -69,3 +70,10 @@ def validate_patterns_regex(pattern:str, value_str:str)->bool:
     Use hmac digest comparison instead
     """
     return True if re.fullmatch(pattern,value_str) else False
+
+def database_close(engine:Engine):
+    """
+    Closes all connections in the pool and merges 
+    SQLite WAL files to the main database.
+    """
+    if engine:engine.dispose()
