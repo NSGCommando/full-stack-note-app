@@ -1,6 +1,7 @@
 import requests, pytest, logging
 import os, sys,string
 from pathlib import Path
+from urllib.parse import urlparse
 root_path = Path(__file__).resolve().parents[2] # root/testing/backend/ThisFile ~ 2/1/0/file
 if root_path not in sys.path:
     sys.path.append(str(root_path))
@@ -27,6 +28,7 @@ def generate_random_username_valid():
 
 # helper to wrap assert call and print response body in case of failure
 def assertion_wrapper(response,expected_status:int):
+    """Helper to wrap asserts and log test JSON responses"""
     caller_data = get_caller_filename(2) # get the test name
     test_logger.info(f"{caller_data.get("caller_func_name")} Response: {response.json()}")
     assert response.status_code == expected_status
@@ -93,7 +95,7 @@ def test_login(session_manager):
 # auth test for delete action
 def test_delete(session_manager):
     """Test to validate role-based authorisation for admin actions(Delete).
-    API Teste: /api/users"""
+    API Tested: /api/users"""
     session = session_manager["session"]
     username = generate_random_username_valid()
     password = f"test_password{os.urandom(2).hex()}"
@@ -101,14 +103,14 @@ def test_delete(session_manager):
     session.post(f"{API_URL}/api/signup",json=login_data)
     session.post(f"{API_URL}/api/login",json=login_data)
     user_data = {"username":username}
-    delete_request = session.delete(f"{API_URL}/api/users",json=user_data)
+    delete_request = session.delete(f"{API_URL}/api/users-delete",json=user_data)
     assertion_wrapper(delete_request,403)
     session.get(f"{API_URL}/api/logout")
 
 # logout test for users
 def test_logout(session_manager):
     """Test for confirmation of logout functionality.
-    API Tested: /logout"""
+    API Tested: /api/logout"""
     session = session_manager["session"]
     username = generate_random_username_valid()
     password = f"test_password{os.urandom(2).hex()}"
@@ -139,7 +141,7 @@ def test_bad_data_password(session_manager,gen_bad_data):
     # print("\nBad Signup Check Password response:",bad_signup_request_password.json())
 
 # try signup with fake header
-def test_malicious_attacker(session_manager):
+def test_malicious_attacker_fake_header(session_manager):
     session=session_manager["session"]
     change_session_details(session=session)
     username_hacker = generate_random_username_valid()
@@ -148,4 +150,22 @@ def test_malicious_attacker(session_manager):
     signup_data_hacker = user_data_hacker
     signup_request_hacker = session.post(f"{API_URL}/api/signup",json=signup_data_hacker)
     assertion_wrapper(signup_request_hacker,403)
-    # print("\nHacker Signup response:",signup_request_hacker.json())
+
+# try login with invalid token
+def test_malicious_attacker_invalid_jwt(session_manager):
+    session=session_manager["session"]
+    username_hacker = generate_random_username_valid()
+    password_hacker = f"test_password{os.urandom(2).hex()}" 
+    user_data_hacker = {"username":username_hacker,"password":password_hacker}
+    signup_data_hacker = user_data_hacker
+    session.post(f"{API_URL}/api/signup",json=signup_data_hacker) # signup
+    login_request_hacker = session.post(f"{API_URL}/api/login",json=signup_data_hacker) # login
+    # extract the JWT
+    valid_jwt = session.cookies.get("access_token_cookie")
+    test_logger.debug(f"Length of valid_jwt:{len(valid_jwt)}")
+    session.get(f"{API_URL}/api/logout") # logout
+    # manually set the cookie back with extracted url domain
+    domain = urlparse(API_URL).hostname
+    session.cookies.set("access_token_cookie", valid_jwt, domain=domain)
+    access_invalid_request = session.get(f"{API_URL}/api/user-view-notes")# try accessing protected route now 
+    assertion_wrapper(access_invalid_request,401)
