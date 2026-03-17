@@ -4,9 +4,10 @@ from functools import wraps
 from flask import request, jsonify
 from sqlalchemy import Engine
 from sqlalchemy.orm import Session, scoped_session
-from backend.table_class import UserData, UserNotes
-from backend.database_connect import get_session_factory
-from backend.backend_constants import BackendPaths, CustomHeaders
+from backend.database.models.table_class import UserData, UserNotes
+from backend.schemas.response_serializer import UserNotesView, UserView
+from backend.database.database_connect import get_session_factory
+from backend.utils.backend_constants import BackendPaths, CustomHeaders
 # extract strings from constants file
 db_path = BackendPaths.DATABASE_PATH.value
 test_path = BackendPaths.TEST_DATABASE_PATH.value
@@ -68,7 +69,7 @@ def enter_data(session:Session, name:str, password_hash:str)->None:
     session.add(new_user)
 
 # delete user data
-def del_data(session:Session, id:int)->Optional[int]:
+def del_user(session:Session, id:int)->Optional[int]:
     """
     Delete data of users
     Commit and closure handled by calling fn
@@ -91,13 +92,13 @@ def print_db(session:Session)->list[dict[str, Any]]:
     calling function owns the connector and it's closure
     """
     # retrieve all results
-    user_list = session.query(UserData).all()
-    return [user.to_dict() for user in user_list] # convert objects into list of dictionaries
+    user_list = session.query(UserData.id,UserData.user_name,UserData.is_admin).all()
+    return [UserView.to_dict(user) for user in user_list] # convert objects into list of dictionaries
 
 # enter new note
 def enter_note(session:Session,note:str,user_id:int,timestamp:str)->None:
     """
-    Enter new user note into "user_notes" Table
+    Enter new user note into "user_notes" Table.
     Calling function owns commit and closure
     """
     new_note = UserNotes(
@@ -114,8 +115,8 @@ def view_user_notes(session:Session,user_id:int)->list[dict[str, Any]]:
     Each dictionary object is of the form:
     # {'id': 1, 'user_id': 42, 'note': 'My first note', 'timestamp': '2026-03-06T19:15:12+00:00'}
     """
-    user_notes = session.query(UserNotes).filter(UserNotes.user_id==user_id).order_by(UserNotes.id.desc()).all()
-    return [note.to_dict() for note in user_notes]
+    user_notes = session.query(UserNotes.id,UserNotes.note,UserNotes.timestamp).filter(UserNotes.user_id==user_id).order_by(UserNotes.id.desc()).all()
+    return [UserNotesView.to_dict(note) for note in user_notes]
 
 # decorator for boilerplate session creation and data check
 def data_conn(f):

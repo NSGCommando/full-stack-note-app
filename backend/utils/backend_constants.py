@@ -6,8 +6,8 @@ class BackendPaths(Enum):
     """
     Class to store all path constants related to Backend
     """
-    DATABASE_PATH = (Path(__file__).resolve().parent/"data"/"database.db").as_posix() # save the database path
-    TEST_DATABASE_PATH = (Path(__file__).resolve().parent/"data"/"test_db.db").as_posix() # save the database path # save the test database file
+    DATABASE_PATH = (Path(__file__).resolve().parents[1]/"data"/"database.db").as_posix() # save the database path
+    TEST_DATABASE_PATH = (Path(__file__).resolve().parents[1]/"data"/"test_db.db").as_posix() # save the database path # save the test database file
 
 class CustomHeaders(Enum):
     """

@@ -1,5 +1,5 @@
 from sqlalchemy import ForeignKey
-from backend.database_connect import UserBase
+from backend.database.database_connect import UserBase
 from sqlalchemy.orm import Mapped,mapped_column,relationship
 
 class UserData(UserBase):

@@ -4,9 +4,9 @@ from flask import Flask, jsonify
 from flask_jwt_extended import JWTManager, get_jwt, create_access_token, jwt_required, set_access_cookies, get_jwt_identity, unset_access_cookies
 from datetime import timedelta
 from flask_cors import CORS
-import logging, os, sys, signal, backend.backend_functions as bf, backend.backend_constants as bc, backend.query_handler as qh
-from backend.project_logger import get_project_logger
-from backend.cache_implement.blacklist_cache import BlacklistCache
+import logging, os, sys, signal, backend.utils.backend_functions as bf, backend.utils.backend_constants as bc, backend.database.queries.query_handler as qh
+from backend.utils.project_logger import get_project_logger
+from backend.utils.blacklist_cache import BlacklistCache
 # Setup JWT blacklister and cleaner thread
 jwt_blacklist = BlacklistCache()
 jwt_blacklist.start_cleanup_thread()
@@ -131,13 +131,13 @@ def delete_user(data, session):
     Returns a json message and status code
     """
     target_user_id = data.get("target_id")
-    admin_id =  int(get_jwt_identity()) # ALWAYS cast values expected to be ints to int explicitly for type-safety
+    admin_id = int(get_jwt_identity()) # ALWAYS cast values expected to be ints to int explicitly for type-safety
     admin_checked = bf.admin_check(session,admin_id)
     match admin_checked:
         case "No Admin":return jsonify({"error":"invalid credentials, user not found"}), 401
         case "No":return jsonify({"error":"invalid credentials, user is not Admin"}), 403
         case "Yes":
-            action_result = qh.del_data(session,target_user_id)
+            action_result = qh.del_user(session,target_user_id)
             session.commit()
             if not action_result:return jsonify({"error":"Target user cannot be deleted (admin or no user)"}), 403
             else: return jsonify({"message":"deletion successful"}), 200
@@ -168,7 +168,9 @@ def signup_user(data, session):
     password = data.get("password")
     if password == "":
         return jsonify({"error":"Password failed validation, empty"}), 400
-    # backend validation for password pattern restrictions
+    # backend validation for pattern restrictions
+    if bf.validate_patterns_regex(user_pattern,username) is False:
+        return jsonify({"error":"Username failed validation"}), 400
     if bf.validate_patterns_regex(password_pattern,password) is False:
         return jsonify({"error":"Password failed validation"}), 400
     password_hashed=bf.hash_passwords(password)
@@ -187,6 +189,8 @@ def add_new_note(data, session):
     user_id=int(get_jwt_identity()) # ALWAYS cast values expected to be ints to int explicitly for type-safety
     timestamp = datetime.now(timezone.utc).isoformat()
     note=data.get("note")
+    if note is None or note == "": # 'is' checks if the var is of type None, == checks if the string is "" (Identity vs Equality)
+        return jsonify({"error":"Note cannot be empty"}), 400
     qh.enter_note(session,note,user_id,timestamp)
     session.commit()
     return jsonify({"message":"Success adding new note"}), 201
@@ -216,7 +220,7 @@ def remove_session(exception=None):
 
 def handle_shutdowns(sig, frame):
     """A shutdown function to handle both dev SIGNIT and docker signals (SIGTERM, SIGQUIT)"""
-    app_logger.info("[INFO] Shutdown signal received. Cleaning up...")
+    app_logger.info(f"[INFO] Shutdown signal {sig} received. Cleaning up...")
     qh.shutdown_sessions()
     app_logger.info("[INFO] Session shut down. Exiting.")
     sys.exit(0)

@@ -3,7 +3,7 @@ from typing import Dict
 from sqlalchemy import Engine
 from sqlalchemy.orm import Session
 from werkzeug.security import generate_password_hash, check_password_hash
-from backend.query_handler import get_user
+from backend.database.queries.query_handler import get_user
 import os, re
 
 ### Define helper functions ###

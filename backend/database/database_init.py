@@ -1,12 +1,12 @@
 import os
 from sqlalchemy import Engine
 from pathlib import Path
-from backend.database_connect import get_session_factory, UserBase
-from backend.table_class import UserData
-from backend.backend_functions import hash_passwords, database_close
-from backend.backend_constants import BackendPaths
+from backend.database.database_connect import get_session_factory, UserBase
+from backend.database.models.table_class import UserData
+from backend.utils.backend_functions import hash_passwords, database_close
+from backend.utils.backend_constants import BackendPaths
 from dotenv import load_dotenv
-from backend.project_logger import get_project_logger
+from backend.utils.project_logger import get_project_logger
 
 logger=get_project_logger()
 
@@ -35,7 +35,7 @@ def initialize_database(test_mode=False):
     Create a new database at the selected path, default path is prod database.
     Switch to test database by passing "test_mode" argument as True
     """
-    data_dir = Path(__file__).resolve().parent/"data"
+    data_dir = Path(__file__).resolve().parents[1]/"data"
     data_dir.mkdir(parents=True,exist_ok=True)
     if test_mode==True:
         path = BackendPaths.TEST_DATABASE_PATH.value

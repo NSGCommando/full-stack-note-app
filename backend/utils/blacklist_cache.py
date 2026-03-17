@@ -31,5 +31,5 @@ class BlacklistCache:
                 self._data = {jti:expiry for jti, expiry in self._data.items() if expiry>curr_time}
     
     def start_cleanup_thread(self):
-        cleaner = threading.Thread(target=self._cleanup,daemon=True) # daemoon=True alalows this to run in main task's background
+        cleaner = threading.Thread(target=self._cleanup,daemon=True) # daemon=True alalows this to run in main task's background
         cleaner.start()

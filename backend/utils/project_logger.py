@@ -11,11 +11,11 @@ Usage:
 """
 import logging, os
 from pathlib import Path
-from backend.backend_functions import get_caller_filename
+from backend.utils.backend_functions import get_caller_filename
 
 # Start from this file's location
 current_file = Path(__file__).resolve()  # full path to this logger file
-backend_dir = current_file.parent  # the folder containing this file
+backend_dir = current_file.parents[1]  # the folder containing this file's folder
 
 def get_project_logger(level:int=logging.INFO,log_dir:Path|None=None)->logging.Logger:
     """
@@ -26,9 +26,11 @@ def get_project_logger(level:int=logging.INFO,log_dir:Path|None=None)->logging.L
     # Determine calling fn's filename
     caller_file = get_caller_filename(2).get("caller_filename") # get the file name that called the logger
     if caller_file is None:
-        raise RuntimeError(f"Cannot determine module Name for get_project_logger from {__file__}")
+        raise RuntimeError(f"Cannot determine module Name for get_project_logger from {__file__}.")
     module_name = Path(caller_file).stem
     # Determine log file save location
+    if log_dir is not None and not isinstance(log_dir,Path): # check for type-safety of the path override
+        raise RuntimeError(f"'log_dir' must be a 'Path' object if passed as an argument.")
     log_dir = backend_dir/"logs" if log_dir is None else log_dir/"logs"
     log_dir.mkdir(parents=True, exist_ok=True)  # Ensure the folder exists
     log_filename = f"{module_name}.log"
@@ -52,7 +54,8 @@ def get_project_logger(level:int=logging.INFO,log_dir:Path|None=None)->logging.L
         
         # Console handler
         console_handler = logging.StreamHandler()
-        console_handler.setFormatter(file_formatter)
+        console_formatter = logging.Formatter("[%(levelname)s] [%(module)s] %(message)s")
+        console_handler.setFormatter(console_formatter)
         console_handler.setLevel(level)
         logger.addHandler(console_handler)
     return logger
