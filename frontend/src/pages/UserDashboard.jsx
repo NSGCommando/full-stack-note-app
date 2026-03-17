@@ -106,7 +106,7 @@ function UserDashboard({user,setUser}){
                     <form id="new-note-form" onSubmit={handleAddNote}>
                         <TextInput className="text-input"
                         id="note_input"
-                        label="new_note"
+                        label="New Note"
                         type="text"
                         required
                         placeholder="Enter your note..."

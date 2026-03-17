@@ -1,1 +1,1 @@
-.venv\Scripts\activate.bat && python -m backend.database_init || pause
+.venv\Scripts\activate.bat && python -m backend.database.database_init || pause

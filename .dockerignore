@@ -23,7 +23,8 @@ backend/*.shm
 **/.env
 **/.env.example
 backend/data
-logs/
+**/logs/
+**/**.log
 .pytest**
 
 # Test results

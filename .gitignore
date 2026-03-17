@@ -10,7 +10,8 @@ backend/.env
 backend/*.db
 backend/*.wal
 backend/*.shm
-logs/
+**/logs/
+**/**.log
 backend/data
 .pytest**
 

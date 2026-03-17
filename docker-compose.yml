@@ -38,7 +38,7 @@ services:
   db_setup: # ensure database is setup before running servers
     container_name: database-builder
     image: note-app-backend
-    command: python -m backend.database_init
+    command: python -m backend.database.database_init
     volumes:
       - ./backend/data:/flask_app/backend/data
     env_file:

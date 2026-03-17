@@ -5,7 +5,7 @@ set FLASK_DEBUG=1
 set PYTHONPATH=.
 
 REM: Start Backend (Flask) server in a new terminal pointing to TEST DB
-start cmd /k ".venv\Scripts\activate.bat && flask --app backend/my_react_app:application run"
+start cmd /k ".venv\Scripts\activate.bat && python -m backend.my_react_app"
 
 echo Backend started in TEST MODE (test_db.db)
 echo running tests
