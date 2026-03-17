@@ -9,3 +9,8 @@ export function decideHost(){
     const isDocker = import.meta.env.VITE_IS_DOCKER === "true";
     return isDocker ? "" : HOST;
 }
+
+export function titleCaseFormat(str) {
+  return str.toLowerCase().split(" ").map((word)=>(
+      word.charAt(0).toUpperCase()+word.slice(1))).join(" ")
+}

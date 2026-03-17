@@ -10,16 +10,3 @@
     color:#fff;
     background-color: red;
 }
-.user-delete-button{
-    background-color: #2a1d1d;
-    color: white;
-    border: none;
-    padding: 4px 8px;      /* Smaller padding for table cells */
-    font-size: 10px;       /* Smaller text */
-    border-radius: 2px;
-    cursor: pointer;
-    transition: opacity 0.2s;
-}
-.user-delete-button:hover{
-    background-color: black;
-}

@@ -108,6 +108,7 @@ function UserDashboard({user,setUser}){
                         id="note_input"
                         label="new_note"
                         type="text"
+                        required
                         placeholder="Enter your note..."
                         value={newNote}
                         onChange={(e) => setNewNote(e.target.value)}

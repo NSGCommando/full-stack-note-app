@@ -54,7 +54,7 @@ function LoginPage({setUser}) {
       <h2>Login Page</h2>
 
       <form onSubmit={handleLogin}>
-        <TextInput className="text-input"
+        <TextInput
           id = "username_input"
           label="Username"
           type="text"

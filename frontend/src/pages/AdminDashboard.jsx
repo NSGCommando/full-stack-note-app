@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { customHeader } from "../utils/authUtils";
 import { decideHost } from "../utils/utilFuncs";
+import TableFactory from "../components/TableFactory"
 import "../styles/AdminDashboard.css";
 const HOST = decideHost();
 
@@ -86,39 +87,7 @@ function AdminDashboard({user:adminUser,setUser}){
                     {/* display user list, giving a style to div is needed to reserve space below the view button, 
                         or the table would be sent below everything else */}
                     <div className = "user-list-container"> 
-                        {userList.length>0?
-                        (   <table>
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Username</th>
-                                        <th>Role</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {userList.map((user, index)=>(
-                                        <tr key={user.id}>
-                                            <td>{index+1}</td>
-                                            <td>{user.user_name}</td>
-                                            <td>{user.is_admin?"Admin":"User"}</td>
-                                            <td> 
-                                                {/* don't allow admins to delete admins*/}
-                                                {!user.is_admin?(
-                                                    <button className="user-delete-button" onClick={()=>deleteUser(user.id)}>
-                                                    Delete
-                                                    </button>
-                                                ):
-                                                (<span>Protected</span>)
-                                                }
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        ):
-                        (<p>No users loaded</p>)
-                        }
+                        <TableFactory dataList={userList} deleteEntry={deleteUser}/>
                     </div>
 
             {/* Logout button*/}

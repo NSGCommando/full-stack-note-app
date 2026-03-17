@@ -1,4 +1,4 @@
-import "../styles/LoginPage.css"
+import "../styles/Components.css"
 
 function SubmitButton({id, children, disabled }) {
   return (
