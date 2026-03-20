@@ -1,8 +1,10 @@
 import { titleCaseFormat } from "../utils/utilFuncs";
 import "../styles/Components.css"
-function TableFactory({dataList, deleteEntry}){
+function TableFactory({dataList, ...props}){
+    let headers =[]
     if(!dataList || dataList.length===0){return (<p>No data found</p>);}
-    const headers = [...Object.keys(dataList[0]),"Actions"]
+    if (props.deleteEntry){headers = [...Object.keys(dataList[0]),"Actions"]}
+    else{headers = [...Object.keys(dataList[0])]}
     return(
         <table className="table-cust">
             <thead>
@@ -31,17 +33,20 @@ function TableFactory({dataList, deleteEntry}){
                                 </td>
                             ))
                         }
-                        <td> 
-                            {/* don't allow admins to delete admins*/}
-                            {!entry.is_admin?
-                                (
-                                <button className="user-delete-button" onClick={()=>deleteEntry(entry.id)}>
-                                Delete
-                                </button>
-                                ):
-                                (<span>Protected</span>)
-                            }
-                        </td>
+                        {props.deleteEntry?
+                            (<td> 
+                                {/* don't allow admins to delete admins*/}
+                                {!entry.is_admin?
+                                    (
+                                    <button className="user-delete-button" onClick={()=>props.deleteEntry(entry.id)}>
+                                    Delete
+                                    </button>
+                                    ):
+                                    (<span>Protected</span>)
+                                }
+                            </td>):null
+                        }
+                        
                     </tr>
                 ))}
             </tbody>

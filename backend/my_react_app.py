@@ -9,7 +9,6 @@ from backend.utils.project_logger import get_project_logger
 from backend.utils.blacklist_cache import BlacklistCache
 # Setup JWT blacklister and cleaner thread
 jwt_blacklist = BlacklistCache()
-jwt_blacklist.start_cleanup_thread()
 
 # extract string for custom header
 frontend_header = bc.CustomHeaders.CUSTOM_HEADER_FRONTEND.value
@@ -138,9 +137,10 @@ def delete_user(data, session):
         case "No":return jsonify({"error":"invalid credentials, user is not Admin"}), 403
         case "Yes":
             action_result = qh.del_user(session,target_user_id)
-            session.commit()
             if not action_result:return jsonify({"error":"Target user cannot be deleted (admin or no user)"}), 403
-            else: return jsonify({"message":"deletion successful"}), 200
+            else:
+                session.commit()
+                return jsonify({"message":"deletion successful"}), 200
 
 # route: ALL: signup username check
 @application.route("/api/check_username",methods=["POST"])
@@ -195,6 +195,20 @@ def add_new_note(data, session):
     session.commit()
     return jsonify({"message":"Success adding new note"}), 201
 
+# route: USE: Delete note
+@application.route("/api/notes-delete",methods=["DELETE"])
+@jwt_required()
+@qh.data_conn
+def delete_note(data, session):
+    user_id=int(get_jwt_identity())
+    note_id = data.get("note_id")
+    action_result = qh.del_note_user(session, user_id, note_id)
+    if action_result is None: return jsonify({"error":f"Note {note_id} not found"}), 400
+    elif action_result is False: return jsonify({"error":f"Note {note_id} does not belong to user {user_id}"}), 403
+    else:
+        session.commit()
+        return jsonify({"message":"Note successfully deleted"}), 200
+
 # route: USER: Show all user's notes
 @application.route("/api/user-view-notes",methods=["GET"])
 @jwt_required()
@@ -240,4 +254,4 @@ for sig_name in signals_to_catch:
 if __name__=="__main__":
     application.run(debug=True,host='0.0.0.0',use_reloader=False) # the reloader starts a second Flask process
     # This process causes issues if Docker tries to shutdown as the signal won't be passed to the App's process
-    # and the reloader will hard shutdown the app,
+    # and the reloader will hard shutdown the app

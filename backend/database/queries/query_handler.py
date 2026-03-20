@@ -1,5 +1,5 @@
 import os
-from typing import Optional, Any
+from typing import Optional, Any, Tuple
 from functools import wraps
 from flask import request, jsonify
 from sqlalchemy import Engine
@@ -108,12 +108,26 @@ def enter_note(session:Session,note:str,user_id:int,timestamp:str)->None:
         )
     session.add(new_note)
 
+# return owner of a note
+def del_note_user(session:Session,user_id:int,note_id:int):
+    """
+    Delete a particular note, given the note's user_id matches the calling user_id.
+    Calling function owns commit and closure
+    """
+    note = session.get(UserNotes, note_id)
+    if not note:return None
+    if int(note.user_id)!=user_id: # only delete if the note belongs to the user
+        return False
+    else:
+        session.delete(note)
+        return True
+
 # return all notes for one user
 def view_user_notes(session:Session,user_id:int)->list[dict[str, Any]]:
     """
-    Returns a list of notes for one user_id 
+    Returns a list of notes for one user_id.
     Each dictionary object is of the form:
-    # {'id': 1, 'user_id': 42, 'note': 'My first note', 'timestamp': '2026-03-06T19:15:12+00:00'}
+    # {'id': 1, 'note': 'My first note', 'timestamp': '2026-03-06T19:15:12+00:00'}
     """
     user_notes = session.query(UserNotes.id,UserNotes.note,UserNotes.timestamp).filter(UserNotes.user_id==user_id).order_by(UserNotes.id.desc()).all()
     return [UserNotesView.to_dict(note) for note in user_notes]

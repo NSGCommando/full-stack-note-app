@@ -18,5 +18,5 @@ class UserNotesView():
         assert isinstance(query_res.id,int), "Note ID should be 'int', check query"
         assert isinstance(query_res.note,str), "Note cannot be non-string, check query"
         return {"id"        :query_res.id,
-                "timestamp" :str(query_res.timestamp),
-                "note"      :query_res.note}
+                "note"      :query_res.note,
+                "timestamp" :str(query_res.timestamp)}

@@ -4,6 +4,7 @@ import { customHeader } from "../utils/authUtils";
 import { decideHost } from "../utils/utilFuncs";
 import TextInput from "../components/TextInput";
 import SubmitButton from "../components/SubmitButton";
+import TableFactory from "../components/TableFactory";
 import "../styles/UserDashboard.css";
 const HOST = decideHost();
 
@@ -74,6 +75,29 @@ function UserDashboard({user,setUser}){
         catch(err){setError("Network error", err);}
     }
     
+    // delete note function
+    async function deleteNote(noteID){
+        // handle user deletion
+        try{
+            const response = await fetch(`${HOST}/api/notes-delete`,{
+                                            method:"DELETE", 
+                                            headers:{"Content-Type":"application/json",
+                                                    [customHeader.CUSTOM_HEADER_FRONTEND]: customHeader.CUSTOM_HEADER_FRONTEND_RESPONSE
+                                            },
+                                            body:JSON.stringify({note_id:noteID}),
+                                            credentials:"include" // JWT token for verification
+                                        })
+            if(response.ok){
+                setError("");
+                handleNotesRefresh(); // refresh the notes list
+            }
+            else{setError("deletion failed");}
+        }
+        catch(err){
+            setError("Network error", err);
+        }
+    }
+
     // Logout function
     async function handleLogout(e){
             e.preventDefault();
@@ -118,29 +142,7 @@ function UserDashboard({user,setUser}){
                 )}
                 </div>
                 <div id="user-notes-container">
-                    {notesList.length>0?
-                    (
-                        <table className="user-notes">
-                            <thead>
-                                <tr>
-                                    <th>No.</th>
-                                    <th>Note</th>
-                                    <th>Date Created</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {notesList.map((note,index)=>(
-                                    <tr key={note.id}>
-                                        <td>{index+1}</td>
-                                        <td>{note.note}</td>
-                                        <td>{note.timestamp}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    ):
-                    (<span>No notes found for user {user.username}</span>)
-                    }
+                    <TableFactory dataList={notesList} deleteEntry={deleteNote}/>
                 </div>
             </div>
             {/* Logout button*/}
