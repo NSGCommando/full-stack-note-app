@@ -21,7 +21,7 @@ def get_project_logger(level:int=logging.INFO,log_dir:Path|None=None)->logging.L
     """
     Returns a logger that logs to both console and a file named after the caller module.
     Logging level default is INFO, pass logging.WARNING or other levels to change at call.
-    Log file directory default is /backend/logs/, can be overriden by caller.
+    Log folder directory default is /backend/, can be overriden by caller.
     """
     # Determine calling fn's filename
     caller_file = get_caller_filename(2).get("caller_filename") # get the file name that called the logger

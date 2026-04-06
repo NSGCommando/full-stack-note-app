@@ -16,7 +16,9 @@ def seed_admin(session_factory):
     """Helper function to seed an admin account into database"""
     # admin data
     secret_key = os.getenv('ADMIN_KEY')
-    assert secret_key is not None
+    if secret_key is None:
+        logger.critical("ADMIN_KEY not found in environment! Seed aborted.")
+        raise ValueError("Missing ADMIN_KEY. Check your .env file.")
     password_hash = hash_passwords(secret_key)
     admin_name = os.getenv('ADMIN_USERNAME')
     with session_factory() as session:
