@@ -1,8 +1,9 @@
 import os, sys
+from pathlib import Path
 from locust import HttpUser, between, task, events, SequentialTaskSet
-root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+root_path = Path(__file__).resolve().parents[2] # root/testing/backend/ThisFile ~ 2/1/0/file
 if root_path not in sys.path:
-    sys.path.append(root_path)
+    sys.path.append(str(root_path))
 from backend.utils.backend_constants import CustomHeaders
 from backend.database.queries.query_handler import shutdown_sessions
 from testing.backend.test_API import generate_random_username_valid
