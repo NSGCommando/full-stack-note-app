@@ -53,7 +53,7 @@ export function useAuthVerify(navigateObject){
     if(locationObject.pathname==="/"){
       navigateObject(user.is_admin?"/admin/dashboard":"/user/dashboard",{replace:true});
     }
-  })
+  },[user, locationObject.pathname, navigateObject]) // Only run this useEffect if specific variables change to save unnecessary calls
 
   return {user,setUser,isVerifying}
 }
