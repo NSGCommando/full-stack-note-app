@@ -7,6 +7,7 @@ import SubmitButton from "../components/SubmitButton";
 import TableFactory from "../components/TableFactory";
 import "../styles/UserDashboard.css";
 const HOST = decideHost();
+const userHost = `${HOST}/api/user`
 
 function UserDashboard({user,setUser}){
     const [notesList, setNotesList] = useState([]);
@@ -29,7 +30,7 @@ function UserDashboard({user,setUser}){
     // View Notes function
     async function handleNotesRefresh(){
         try{
-                const response = await fetch(`${HOST}/api/user-view-notes`,{
+                const response = await fetch(`${userHost}/view-notes`,{
                     method:"GET",
                     headers:{"Content-Type":"application/json",
                             [customHeader.CUSTOM_HEADER_FRONTEND]: customHeader.CUSTOM_HEADER_FRONTEND_RESPONSE},
@@ -54,7 +55,7 @@ function UserDashboard({user,setUser}){
     async function handleAddNote(e){
         e.preventDefault();
         try{
-            const response = await fetch(`${HOST}/api/user-add-note`,{
+            const response = await fetch(`${userHost}/add-note`,{
                 method:"POST",
                 headers:{"Content-Type":"application/json",
                         [customHeader.CUSTOM_HEADER_FRONTEND]: customHeader.CUSTOM_HEADER_FRONTEND_RESPONSE
@@ -79,7 +80,7 @@ function UserDashboard({user,setUser}){
     async function deleteNote(noteID){
         // handle user deletion
         try{
-            const response = await fetch(`${HOST}/api/notes-delete`,{
+            const response = await fetch(`${userHost}/notes-delete`,{
                                             method:"DELETE", 
                                             headers:{"Content-Type":"application/json",
                                                     [customHeader.CUSTOM_HEADER_FRONTEND]: customHeader.CUSTOM_HEADER_FRONTEND_RESPONSE

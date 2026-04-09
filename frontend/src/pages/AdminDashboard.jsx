@@ -4,7 +4,8 @@ import { customHeader } from "../utils/authUtils";
 import { decideHost } from "../utils/utilFuncs";
 import TableFactory from "../components/TableFactory"
 import "../styles/AdminDashboard.css";
-const HOST = decideHost();
+const HOST = decideHost()+"/api";
+const adminHost = `${HOST}/admin`
 
 function AdminDashboard({user:adminUser,setUser}){
     // navigate(routing) and location(state) hook
@@ -18,7 +19,7 @@ function AdminDashboard({user:adminUser,setUser}){
     async function handleLogout(e){
         e.preventDefault();
         try {
-            await fetch(`${HOST}/api/logout`, // Cookie invalid, inform the server 
+            await fetch(`${HOST}/logout`, // Cookie invalid, inform the server 
                 {
                 method: "GET",
                 headers:{   "Content-Type": "application/json",
@@ -38,7 +39,7 @@ function AdminDashboard({user:adminUser,setUser}){
     async function deleteUser(targetID){
         // handle user deletion
         try{
-            const response = await fetch(`${HOST}/api/users-delete`,{
+            const response = await fetch(`${adminHost}/users-delete`,{
                                             method:"DELETE", 
                                             headers:{"Content-Type":"application/json",
                                                     [customHeader.CUSTOM_HEADER_FRONTEND]: customHeader.CUSTOM_HEADER_FRONTEND_RESPONSE
@@ -61,7 +62,7 @@ function AdminDashboard({user:adminUser,setUser}){
     
     async function showUsers(){
         try{
-                const response = await fetch(`${HOST}/api/show-users`,{
+                const response = await fetch(`${adminHost}/show-users`,{
                     method:"GET",
                     headers:{"Content-Type":"application/json",
                             [customHeader.CUSTOM_HEADER_FRONTEND]: customHeader.CUSTOM_HEADER_FRONTEND_RESPONSE},

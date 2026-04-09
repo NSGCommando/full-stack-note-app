@@ -111,10 +111,10 @@ def test_login(session_manager,gen_good_data):
 # auth test for delete action
 def test_delete(login_setup):
     """Test to validate role-based authorisation for admin actions(Delete).
-    API Tested: /api/users"""
+    API Tested: /api/admin/users-delete"""
     session = login_setup["session"]
     user_data = {"username":login_setup["username"]}
-    delete_request = session.delete(f"{API_URL}/api/users-delete",json=user_data)
+    delete_request = session.delete(f"{API_URL}/api/admin/users-delete",json=user_data)
     assertion_wrapper(delete_request,403)
     session.get(f"{API_URL}/api/logout")
 
@@ -184,5 +184,5 @@ def test_malicious_attacker_invalid_jwt(login_setup):
     # manually set the cookie back with extracted url domain
     domain = urlparse(API_URL).hostname
     session.cookies.set("access_token_cookie", valid_jwt, domain=domain)
-    access_invalid_request = session.get(f"{API_URL}/api/user-view-notes")# try accessing protected route now 
+    access_invalid_request = session.get(f"{API_URL}/api/user/view-notes")# try accessing protected route now 
     assertion_wrapper(access_invalid_request,401)
