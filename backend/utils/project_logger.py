@@ -9,7 +9,7 @@ Usage:
     logger = get_project_logger(?Level=logging.[INFO|WARNING|ERROR])
     logger.info("Some message")
 """
-import logging, os
+import logging
 from pathlib import Path
 from backend.utils.backend_functions import get_caller_filename
 
@@ -17,14 +17,15 @@ from backend.utils.backend_functions import get_caller_filename
 current_file = Path(__file__).resolve()  # full path to this logger file
 backend_dir = current_file.parents[1]  # the folder containing this file's folder
 
-def get_project_logger(level:int=logging.INFO,log_dir:Path|None=None)->logging.Logger:
+def get_project_logger(level:int=logging.INFO,log_dir:Path|None=None, stack_level:int=2)->logging.Logger:
     """
     Returns a logger that logs to both console and a file named after the caller module.
+    {stack_level} argument can be overriden to manually set depth for returned module.
     Logging level default is INFO, pass logging.WARNING or other levels to change at call.
     Log folder directory default is /backend/, can be overriden by caller.
     """
     # Determine calling fn's filename
-    caller_file = get_caller_filename(2).get("caller_filename") # get the file name that called the logger
+    caller_file = get_caller_filename(stack_level).get("caller_filename") # get the file name that called the logger
     if caller_file is None:
         raise RuntimeError(f"Cannot determine module Name for get_project_logger from {__file__}.")
     module_name = Path(caller_file).stem
