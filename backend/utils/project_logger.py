@@ -20,14 +20,16 @@ backend_dir = current_file.parents[1]  # the folder containing this file's folde
 def get_project_logger(level:int=logging.INFO,log_dir:Path|None=None, stack_level:int=2)->logging.Logger:
     """
     Returns a logger that logs to both console and a file named after the caller module.
-    {stack_level} argument can be overriden to manually set depth for returned module.
+    {stack_level} argument can be overriden to manually set depth for returned module, affecting where the log is written.
+    - Note that {stack_level} cannot affect the LogRecord object used to get module in log formatter itself.
     Logging level default is INFO, pass logging.WARNING or other levels to change at call.
     Log folder directory default is /backend/, can be overriden by caller.
     """
     # Determine calling fn's filename
-    caller_file = get_caller_filename(stack_level).get("caller_filename") # get the file name that called the logger
+    caller_stack = get_caller_filename(stack_level)
+    caller_file = caller_stack.get("caller_filename") # get the file name that called the logger
     if caller_file is None:
-        raise RuntimeError(f"Cannot determine module Name for get_project_logger from {__file__}.")
+        raise RuntimeError(f"Cannot determine Module Name for get_project_logger from {__file__}. \nError: {caller_stack.get("message")}")
     module_name = Path(caller_file).stem
     # Determine log file save location
     if log_dir is not None and not isinstance(log_dir,Path): # check for type-safety of the path override

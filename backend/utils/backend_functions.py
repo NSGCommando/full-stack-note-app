@@ -28,10 +28,12 @@ def get_caller_filename(depth:int=1)->Dict[str,str|None]:
     # Warn the user if given depth is not reached
     if depth_track != depth:
         return_object["message"] = f"\nInspect Stack does not extend to depth:{depth}, deepest found caller at depth:{depth_track}"
-    else:
+    elif not caller_filename.startswith("<frozen"):
         return_object["caller_filename"] = caller_filename
         return_object["caller_func_name"] = caller_func_name
         return_object["message"] = "Successfully retrieved requested function"
+    else:
+        return_object["message"] = f"Provided depth {depth} greater than project root function; caller retrieval aborted!"
     return return_object
 
 def confirm_password(hash, password)->bool:
