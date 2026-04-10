@@ -29,7 +29,8 @@ def get_project_logger(level:int=logging.INFO,log_dir:Path|None=None, stack_leve
     caller_stack = get_caller_filename(stack_level)
     caller_file = caller_stack.get("caller_filename") # get the file name that called the logger
     if caller_file is None:
-        raise RuntimeError(f"Cannot determine Module Name for get_project_logger from {__file__}. \nError: {caller_stack.get("message")}")
+        raise RuntimeError(f"Cannot determine Module Name for get_project_logger from {__file__}." 
+        f"\nError: {caller_stack.get('message')}")
     module_name = Path(caller_file).stem
     # Determine log file save location
     if log_dir is not None and not isinstance(log_dir,Path): # check for type-safety of the path override
