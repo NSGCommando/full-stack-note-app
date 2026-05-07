@@ -21,7 +21,7 @@ function TableFactory({dataList, ...props}){
             <tbody>
                 {dataList.map((entry,index)=>(
                     <tr key={entry.id}>
-                        {/*Object.keys(entry) gives a list of entry object's keys. If the key is "is_admin
+                        {/*Object.keys(entry) gives a list of entry object's keys. If the key is "is_admin"
                         Then return Admin or User, for any other key just return the value*/}
                         {
                             Object.keys(entry).map((key)=>(
