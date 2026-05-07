@@ -8,7 +8,7 @@ from backend.utils.backend_constants import BackendPaths
 from dotenv import load_dotenv
 from backend.utils.project_logger import get_project_logger
 
-logger=get_project_logger()
+logger=get_project_logger(module_name="backend.database.database_init")
 
 load_dotenv()
 

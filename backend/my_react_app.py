@@ -17,10 +17,10 @@ frontend_header_response = bc.CustomHeaders.CUSTOM_HEADER_FRONTEND_RESPONSE.valu
 application = Flask(__name__) # expose the app
 # set up logging
 if os.getenv("TESTING_MODE") == "True":
-    app_logger= get_project_logger(logging.DEBUG)
+    app_logger= get_project_logger(module_name=__name__,level=logging.DEBUG)
     app_logger.warning("WARNING: USING TEST DATABASE")
 else:
-    app_logger= get_project_logger(logging.INFO)
+    app_logger= get_project_logger(module_name=__name__,level=logging.INFO)
     app_logger.info("INFO: USING PRODUCTION DATABASE")
 
 # allows the app to receive requests from the Vite server IP, and allow browser to attach cookies

@@ -15,7 +15,7 @@ user_pattern = bc.RegexPatterns.USERNAME_PATTERN.value
 password_pattern = bc.RegexPatterns.PASSWORD_PATTERN.value
 
 # set up logging
-logger= get_project_logger(level=logging.INFO)
+logger= get_project_logger(module_name=__name__,level=logging.INFO)
 
 # route: DEV: flask homepage
 @all_router.route("/")
@@ -44,6 +44,7 @@ def login(data,session):
         "is_admin": user.is_admin
     })
     set_access_cookies(response, access_token)
+    logger.info("User Login Occurance")
     return response, 200
 
 # route: ALL: logout and disable cookie
@@ -58,6 +59,7 @@ def logout_user():
     jwt_blacklist.add_jti(jti,expiry)
     response = jsonify({"message":"Logout successful"})
     unset_access_cookies(response)
+    logger.info("User Logout Occurance")
     return response,200
 
 # route: ALL: verify current user token validity and return username, admin status if valid
@@ -107,6 +109,7 @@ def signup_user(data, session):
     try:
         qh.enter_data(session,username,password_hashed)
         session.commit()
+        logger.info("User Signup Occurance")
         return jsonify({"message":"user signed up"}), 201 # request successfully created new user resource
     except Exception as e:
         return jsonify({"error": "Internal server error"}), 500

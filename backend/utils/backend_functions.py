@@ -8,34 +8,6 @@ import os, re
 
 ### Define helper functions ###
 
-def get_caller_filename(depth:int=1)->Dict[str,str|None]:
-    """Helper function to get filename and function name of function at given depth in Inspect Stack.
-    Example: get_called_filename() called from Logger(), itself called from ABC(). 
-    Depth of 1 returns 'LoggerFile' and 'Logger', Depth of 2 returns 'ABCFile' and 'ABC'.
-    Returns a dictionary with keys 'caller_filename','caller_func_name' and 'message'"""
-    # Determine the calling file name
-    frame = inspect.currentframe()
-    depth_track = 0
-    # Find the deepest possible fn in the Inspect Stack, upto the given depth
-    while depth_track!=depth and frame is not None:
-        frame = frame.f_back # don't worry about frame being None, fallbacks handled after the while loop
-        if frame is not None: 
-            depth_track+=1
-    # fallback to handle possibility of None (asserts wouldn't handle Nones, try..catch wouldn't satisfy PyRight)
-    caller_filename = frame.f_code.co_filename if frame is not None else __file__
-    caller_func_name = frame.f_code.co_name if frame is not None else None
-    return_object={"caller_filename":None,"caller_func_name":None,"message":""}
-    # Warn the user if given depth is not reached
-    if depth_track != depth:
-        return_object["message"] = f"\nInspect Stack does not extend to depth:{depth}, deepest found caller at depth:{depth_track}"
-    elif not caller_filename.startswith("<frozen"):
-        return_object["caller_filename"] = caller_filename
-        return_object["caller_func_name"] = caller_func_name
-        return_object["message"] = "Successfully retrieved requested function"
-    else:
-        return_object["message"] = f"Provided depth {depth} greater than project root function; caller retrieval aborted!"
-    return return_object
-
 def confirm_password(hash, password)->bool:
     """
     Wrapper function to ensure the password hash stored and received password match.

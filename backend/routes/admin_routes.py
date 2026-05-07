@@ -1,8 +1,12 @@
 from flask import jsonify, Blueprint
 from flask_jwt_extended import jwt_required, get_jwt_identity
 import backend.utils.backend_functions as bf, backend.database.queries.query_handler as qh
+from backend.utils.project_logger import get_project_logger
 
 admin_router = Blueprint('AdminRouter', __name__, url_prefix='/admin')
+
+# set up logging
+logger= get_project_logger(module_name=__name__)
 
 # route: ADMIN: retrieve all users in database
 @admin_router.route("/show-users",methods=["GET"])
@@ -42,4 +46,5 @@ def delete_user(data, session):
             if not action_result:return jsonify({"error":"Target user cannot be deleted (admin or no user)"}), 403
             else:
                 session.commit()
+                logger.info("User Deletion Occurance")
                 return jsonify({"message":"deletion successful"}), 200
