@@ -72,6 +72,8 @@ A simple app to allow users to save notes and view them later. It can be easily 
   
 
 ## Initial Setup ##
+- Install backend dependencies via `pip install -r requirements.txt`
+- Install frontend dependencies via `npm run install:all`; this installs node modules for both frontend and UI testing.
 - Example database admin details and secret key for token signing provided in `.env.example`
 - Rename it to `.env` and change the data to your preference
 - If running from local repository, run `database_init.bat` batch file to manually generate the database; the script adds your admin details to the database
@@ -94,6 +96,10 @@ A simple app to allow users to save notes and view them later. It can be easily 
 - The environment for normal running is cloned and configured to point to a testing database
 - The batch files explicitly set `TESTING_MODE` to True, and the `data_conn` decorator reads the value to change the filepath to the testing database, so any actual data isn't impacted
 - Unit test file consists of a "normal" session, with correct headers and requests, and an "attacker" session where the header is fake
+
+## Testing the Frontend UI ##
+- Use `npm run test:frontend` from root terminal to run Playwright UI test (Playwright will automatically create a server to test)
+- The only test currently is to confirm login page elements
  
 ## Run Backend and Frontend Servers ##
 - Run both servers from `run_app.bat` batch file
