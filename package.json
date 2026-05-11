@@ -1,0 +1,10 @@
+{
+  "description": "Collection of root scripts to automate dependency installation for node.js",
+  "private": true,
+  "scripts": {
+    "install:frontend": "npm install --prefix frontend",
+    "install:tests": "npm install --prefix testing/frontend",
+    "install:all": "npm run install:frontend && npm run install:tests",
+    "test:frontend": "cd testing/frontend && npx playwright test"
+  }
+}
