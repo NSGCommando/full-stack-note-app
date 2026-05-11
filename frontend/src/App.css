@@ -5,6 +5,31 @@
   text-align: center;
 }
 
+.loading-screen {
+  position: fixed;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: radial-gradient(
+      circle at center,
+      #0b1220 0%,
+      #05070d 60%,
+      #000000 100%
+  );
+
+  color: #cfe3ff;
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+
+  user-select: none;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
