@@ -80,7 +80,7 @@ function AdminDashboard({user:adminUser,setUser}){
         }
     }
     return(
-        <div id="dashboard-container">
+        <div id="admin-dashboard-container">
             <h1>Admin Dashboard</h1>
             {error && <div className="error-banner">{error}</div>}
                 <p>Login was successful, Admin {adminName}</p>
@@ -92,7 +92,7 @@ function AdminDashboard({user:adminUser,setUser}){
                     </div>
 
             {/* Logout button*/}
-            <div id="logout-container">
+            <div id="admin-logout-container">
                 <button onClick={handleLogout}>Logout</button>
             </div>
         </div>

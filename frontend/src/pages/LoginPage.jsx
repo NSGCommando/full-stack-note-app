@@ -50,7 +50,7 @@ function LoginPage({setUser}) {
   }
 
   return (
-    <div className="login-container">
+    <div id="login-container">
       <h2>Login Page</h2>
 
       <form onSubmit={handleLogin}>
@@ -81,7 +81,7 @@ function LoginPage({setUser}) {
       {/*If error has been set (truthy value) '&&' makes the expression default to the <p> element, making react render the error text
       If error is not set (falsy value), '&&' defaults to the preceding expression 'error' so react will not render the <p>*/}
       {error && <p style={{ color: "red", marginTop: "1rem" }}>{error}</p>}
-      <div  className="signup-container">
+      <div id="signup-button-container">
         <button className="submit-button" onClick={handleSignUp}>Sign Up</button>
       </div>
     </div>

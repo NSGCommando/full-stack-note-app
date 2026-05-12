@@ -61,7 +61,7 @@ function SignUp(){
         // Ensure to use 'className' and not 'classname'
         // tag or attribute mistakes leaves the render to be ignored, and no error warnings either
         // maybe think of making an html parser for this sort of things
-        <div className="signup-container">
+        <div id="signup-container">
             <h1>Signup Page</h1>
             {
                 signupStage===1? // conditional rendering using signupStage

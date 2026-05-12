@@ -13,7 +13,7 @@ function App() {
   const {user, setUser, isVerifying} = useAuthVerify(navigateObject);
   
   if (isVerifying) {
-  return <div className="loading-screen">Checking your session...</div>;
+  return <div id="loading-screen" className="loading-screen">Checking your session...</div>;
   }
 
   return(

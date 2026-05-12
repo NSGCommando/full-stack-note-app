@@ -1,12 +1,12 @@
 import { titleCaseFormat } from "../utils/utilFuncs";
 import "../styles/Components.css"
-function TableFactory({dataList, ...props}){
+function TableFactory({dataList, id, ...props}){
     let headers =[]
     if(!dataList || dataList.length===0){return (<p>No data found</p>);}
     if (props.deleteEntry){headers = [...Object.keys(dataList[0]),"Actions"]}
     else{headers = [...Object.keys(dataList[0])]}
     return(
-        <table className="table-cust">
+        <table id={id} className="table-cust">
             <thead>
                 <tr>
                 {        

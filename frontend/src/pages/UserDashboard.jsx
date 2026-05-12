@@ -119,9 +119,9 @@ function UserDashboard({user,setUser}){
             }
         }
     return(
-        <div id="dashboard-container">
+        <div id="user-dashboard-container">
         <h1>User Dashboard</h1>
-        {error && <div className="error-banner">{error}</div>}
+        {error && <div id="user-dashboard-error-banner" className="error-banner">{error}</div>}
             <p>Login was successful, User {user.username}</p>
             {/* Notes button*/}
             <div id="notes-container">
@@ -130,7 +130,7 @@ function UserDashboard({user,setUser}){
                 {showNoteInput && (
                     <form id="new-note-form" onSubmit={handleAddNote}>
                         <TextInput className="text-input"
-                        id="note_input"
+                        id="note-input"
                         label="New Note"
                         type="text"
                         required
@@ -138,16 +138,16 @@ function UserDashboard({user,setUser}){
                         value={newNote}
                         onChange={(e) => setNewNote(e.target.value)}
                     />
-                    <SubmitButton id="submit_button_signup_username">Enter</SubmitButton>
+                    <SubmitButton id="submit-button-signup-username">Enter</SubmitButton>
                     </form>
                 )}
                 </div>
-                <div id="user-notes-container">
-                    <TableFactory dataList={notesList} deleteEntry={deleteNote}/>
+                <div id="user-notes-table-container">
+                    <TableFactory dataList={notesList} deleteEntry={deleteNote} id="user-notes-table"/>
                 </div>
             </div>
             {/* Logout button*/}
-            <div id="logout-container">
+            <div id="user-logout-container">
                 <button onClick={handleLogout}>Logout</button>
             </div>
         </div>
