@@ -5,6 +5,7 @@ set FLASK_DEBUG=1
 set PYTHONPATH=.
 
 REM: Start Backend (Flask) server in a new terminal pointing to TEST DB
+REM: On Windows, child processes inherit the parent's flags by default
 start cmd /k ".venv\Scripts\activate.bat && python -m backend.my_react_app"
 
 echo Backend started in TEST MODE (test_db.db)
