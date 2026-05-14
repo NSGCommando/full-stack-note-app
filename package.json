@@ -5,6 +5,8 @@
     "install:frontend": "npm install --prefix frontend",
     "install:tests": "npm install --prefix testing/frontend",
     "install:all": "npm run install:frontend && npm run install:tests",
-    "test:frontend": "cd testing/frontend && npx playwright test"
+    "test:frontend": "cd testing/frontend && npx playwright test",
+    "app:local":".\\run_app.bat",
+    "app:local-test":".\\run_app_test.bat"
   }
 }
