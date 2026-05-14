@@ -67,7 +67,7 @@ function SignUp(){
                 signupStage===1? // conditional rendering using signupStage
                 (<form id="signup-username-form" onSubmit={checkUsernameSignUp}>
                     <TextInput className="text-input"
-                    id = "username_input"
+                    id = "username-input-signup"
                     label="Username"
                     type="text"
                     required
@@ -76,12 +76,12 @@ function SignUp(){
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     />
-                    <SubmitButton id="submit_button_signup_username">Enter</SubmitButton>
+                    <SubmitButton id="submit-button-signup-username">Enter</SubmitButton>
                 </form>)
                 :(
                     <form id="signup-password-form" onSubmit={handleFinalSignUp}>
                         <TextInput className="text-input"
-                        id = "password_input"
+                        id = "password-input-signup"
                         label="Password"
                         type="password"
                         required
@@ -90,7 +90,7 @@ function SignUp(){
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         />
-                        <SubmitButton id="submit_button_signup_password">Enter</SubmitButton>
+                        <SubmitButton id="submit-button-signup-password">Enter</SubmitButton>
                     </form>
                 ) 
             }

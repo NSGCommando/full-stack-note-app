@@ -55,7 +55,7 @@ function LoginPage({setUser}) {
 
       <form onSubmit={handleLogin}>
         <TextInput
-          id = "username_input"
+          id = "username-input-login"
           label="Username"
           type="text"
           required
@@ -66,7 +66,7 @@ function LoginPage({setUser}) {
         />
 
         <TextInput
-          id = "password_input"
+          id = "password-input-login"
           label="Password"
           type="password"
           required
@@ -82,7 +82,7 @@ function LoginPage({setUser}) {
       If error is not set (falsy value), '&&' defaults to the preceding expression 'error' so react will not render the <p>*/}
       {error && <p style={{ color: "red", marginTop: "1rem" }}>{error}</p>}
       <div id="signup-button-container">
-        <button className="submit-button" onClick={handleSignUp}>Sign Up</button>
+        <button id="signup-start-button" className="submit-button" onClick={handleSignUp}>Sign Up</button>
       </div>
     </div>
   );
