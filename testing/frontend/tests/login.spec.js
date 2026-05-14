@@ -5,7 +5,7 @@ const SCREENSHOT_LOGIN = "screenshots/login-test"
 
 test('Login Page', async ({ page }) => {
   const loginPage = new LoginPage(page);
-  await page.goto('/');
+  await loginPage.goto();
 
   // wait for loading screen to be visible
   await expect(loginPage.loadingAnim).toBeVisible();
@@ -18,3 +18,10 @@ test('Login Page', async ({ page }) => {
   await expect(loginPage.signupContainer).toBeVisible();
   await loginPage.signupContainer.screenshot({path:`${SCREENSHOT_LOGIN}/signupContainer.png`});
 });
+
+test('Navigate to Signup', async({page})=>{
+  const loginPage = new LoginPage(page);
+  await loginPage.goto();
+  await loginPage.signupStartButton.click();
+  await expect(page).toHaveURL("/signup");
+})
