@@ -99,7 +99,7 @@ A simple app to allow users to save notes and view them later. It can be easily 
 
 ## Testing the Frontend UI ##
 - Use `npm run test:frontend` from root terminal to run Playwright UI test (Playwright will automatically create a server to test)
-- The only test currently is to confirm login page elements
+- Tests are for confirming signup flow and verifying presence of fields in login and signup pages.
  
 ## Run Backend and Frontend Servers ##
 - Run both servers from `run_app.bat` batch file

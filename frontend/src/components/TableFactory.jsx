@@ -1,4 +1,5 @@
 import { titleCaseFormat } from "../utils/utilFuncs";
+import { columnLabels } from "../utils/utilConsts";
 import "../styles/Components.css"
 function TableFactory({dataList, id, ...props}){
     let headers =[]
@@ -12,7 +13,8 @@ function TableFactory({dataList, id, ...props}){
                 {        
                     headers.map((header)=>(
                         <th key={header}>
-                            {header==="is_admin"?"Role":titleCaseFormat(header)}
+                            {/* Use of Nullish Operator. If left-hand value is undefined, return right-hand value */}
+                            {columnLabels[header]??titleCaseFormat(header)}
                         </th>
                     ))
                 }
