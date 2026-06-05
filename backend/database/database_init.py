@@ -53,6 +53,7 @@ def initialize_database(test_mode=False):
     if test_mode: # clear data if in testing mode
         UserBase.metadata.drop_all(bind=engine)
         UserBase.metadata.create_all(bind=engine)
+        seed_admin(session_factory)
     elif db_present is False: # ONLY recreate the database if it doesn't exist already
         UserBase.metadata.create_all(bind=engine)
         logger.info(f"Database created at {path}")

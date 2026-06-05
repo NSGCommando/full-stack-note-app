@@ -67,6 +67,18 @@ def login_setup(session_manager, gen_good_data):
     }
 
 @pytest.fixture
+def login_admin_setup(session_manager):
+    session=session_manager["session"]
+    admin_name = os.getenv("ADMIN_USERNAME")
+    admin_key = os.getenv("ADMIN_KEY")
+    valid_admin_data = {"username":admin_name,"password":admin_key}
+    session.post(f"{API_URL}/api/login",json=valid_admin_data)
+    yield {
+        "session":session,
+        "username":admin_name
+    }    
+
+@pytest.fixture
 def gen_bad_data():
     """Fixture to generate invalid user data"""
     # invalid usernames and passwords
@@ -76,7 +88,23 @@ def gen_bad_data():
         "bad_username":bad_username,
         "bad_password":bad_password,
     }
+## TEST: ADMINS
+def test_admin_show_users(login_admin_setup):
+    """Test to check admin show user route logic.
+    API tested: /api/admin/show-users"""
+    session = login_admin_setup["session"]
+    show_user_request = session.get(f"{API_URL}/api/admin/show-users")
+    assertion_wrapper(show_user_request,200,test_admin_show_users)
 
+def test_admin_del_admin(login_admin_setup):
+    """Test to check admin delete restriction on admins.
+    API tested: /api/admin/users-delete"""
+    session = login_admin_setup["session"]
+    json_del_data = {"target_id":0}
+    del_user_request = session.delete(f"{API_URL}/api/admin/users-delete", json=json_del_data)
+    assertion_wrapper(del_user_request,403,test_admin_del_admin)
+
+## TEST: USERS
 # signup test
 def test_signup(session_manager,gen_good_data):
     """Test to validate signup route logic.
