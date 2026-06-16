@@ -31,6 +31,7 @@ def seed_admin(session_factory):
             )
             session.add(new_admin)
             session.commit()
+            logger.info("Admin seeded into database")
 
 def initialize_database(test_mode=False):
     """
@@ -57,7 +58,6 @@ def initialize_database(test_mode=False):
     elif db_present is False: # ONLY recreate the database if it doesn't exist already
         UserBase.metadata.create_all(bind=engine)
         logger.info(f"Database created at {path}")
-    if db_present is False:
         seed_admin(session_factory)
     database_close(engine)
 
