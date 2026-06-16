@@ -1,5 +1,5 @@
 import { titleCaseFormat } from "../utils/utilFuncs";
-import { columnLabels } from "../utils/utilConsts";
+import { columnLabels, columnFormatter } from "../utils/utilConsts";
 import "../styles/Components.css"
 function TableFactory({dataList, id, ...props}){
     let headers =[]
@@ -28,9 +28,13 @@ function TableFactory({dataList, id, ...props}){
                         {
                             Object.keys(entry).map((key)=>(
                                 <td key={key}>
-                                    {key==="is_admin"?
-                                        (entry[key]===true?"Admin":"User"):
-                                        (key==="id"?index:entry[key])
+                                    {/* Makes use of a object to map different keys to different functions.
+                                        "is_admin" maps to Admin or User based on its value, while "id" returns index+1.
+                                        If a value for the key doesn't exist, then default to returning entry[key]*/}
+                                    {
+                                        columnFormatter[key]?
+                                        columnFormatter[key](entry[key],index):
+                                        entry[key]
                                     }
                                 </td>
                             ))

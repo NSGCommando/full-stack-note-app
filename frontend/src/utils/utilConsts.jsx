@@ -4,5 +4,15 @@
  */
 export const columnLabels = {
   is_admin: "Role",
-  id: "Index"
+  id: "S.No."
+};
+
+/**
+ * A mapping dictionary for injecting specific values if specific values are detected.
+ * Helps bypass the need for multiple edge-cases with UI render for column values.
+ * It can substitute a function for a value too, which is how the is_admin replacer works.
+ */
+export const columnFormatter = {
+  is_admin:(value)=>value? "Admin":"User",
+  id:(_,index)=> index+1
 };
