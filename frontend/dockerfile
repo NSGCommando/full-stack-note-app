@@ -4,9 +4,7 @@ WORKDIR /react_app
 COPY frontend/package*.json ./
 RUN npm install
 COPY frontend/ ./
-# To tell the app whether running in Docker or not
-ARG VITE_IS_DOCKER
-ENV VITE_IS_DOCKER=$VITE_IS_DOCKER
+
 RUN npm run build
 # We switch to an Nginx image. Node is now GONE.
 FROM nginx:stable-alpine
