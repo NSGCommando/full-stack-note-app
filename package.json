@@ -1,5 +1,5 @@
 {
-  "description": "Collection of root scripts to automate dependency installation for node.js",
+  "description": "Collection of root scripts to automate dependency installation and startups using npm",
   "private": true,
   "scripts": {
     "install:frontend": "npm install --prefix frontend",
@@ -7,6 +7,10 @@
     "install:all": "npm run install:frontend && npm run install:tests",
     "test:frontend": "cd testing/frontend && npx playwright test",
     "app:local":".\\run_app.bat",
-    "app:local-test":".\\run_app_test.bat"
+    "app:local-test":".\\run_app_test.bat",
+    "docker:dev":"docker compose -f docker-compose.yml -f docker-compose.dev.yml up",
+    "docker:dev-build":"docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build",
+    "docker:prod":"docker compose -f docker-compose.yml -f docker-compose.dev.yml up",
+    "docker:prod-build":"docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build"
   }
 }

@@ -1,0 +1,4 @@
+services:
+  backend:
+    environment:
+      - TESTING_MODE=0

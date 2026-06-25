@@ -6,8 +6,8 @@ services:
     build:
       context: .  # Path to the folder containing the Dockerfile
       dockerfile: frontend/dockerfile # The actual filename (optional if named 'Dockerfile')
-      args:
-        - VITE_IS_DOCKER=true
+    environment:
+      - VITE_IS_DOCKER=true
     ports:
       - "8080:80"
     depends_on:
@@ -24,6 +24,8 @@ services:
       dockerfile: backend/dockerfile
     env_file:
       - ./backend/.env
+    environment:
+      - TESTING_MODE=1
     volumes:
       # Format: [Host Path on Windows] : [Path inside Container]
       # Mirror the database paths so docker can persist changes to disk and load changed data from disk
