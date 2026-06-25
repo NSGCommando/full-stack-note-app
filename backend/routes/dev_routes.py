@@ -23,6 +23,7 @@ def shutdown_db():
     dev_route_logger.info("Test database successfully shutdown")
     return jsonify({"message":"shutdown successful"}), 200
 
+# Route to ping for backend API health
 @dev_router.route("/health", methods=["GET"])
 def health():
     return jsonify({"status":"ok"}), 200
