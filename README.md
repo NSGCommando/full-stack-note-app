@@ -77,10 +77,20 @@ A simple app to allow users to save notes and view them later. It can be easily 
 - Example database admin details and secret key for token signing provided in `.env.example`
 - Rename it to `.env` and change the data to your preference
 - If running from local repository, run `database_init.bat` batch file to manually generate the database; the script adds your admin details to the database
-- No need to manually call the batch script if running in Docker via `docker-compose.yml`, the compose with automatically create the database if needed
+- No need to manually call the batch script if running in Docker via the Docker scripts, the compose with automatically create the database if needed via an init container
+
+### Docker
+- Alternatively, you can run the entire app via Docker
+- Install Docker Engine and Docker Compose CLI Plugin:
+  - Windows has several apps available that do everything at once. For example, Docker Desktop; go to `https://www.docker.com/` to download and install Docker Desktop
+  - Linux users just need the `docker -ce` and `docker-compose-plugin` packages to get it working
+- Confirm Docker is installed via `docker  --version`
+- Once confirmed, run the compose build via the Docker scripts as described in the next section
+- The Dockerized app runs on Nginx instead of Vite, so the UI will be available on `localhost:8080` if running via Docker
+- As of the moment, the test suite hasn't been included into the compose orchestration for build validation
 
 ## Usage ##
-- Open React.js UI by navigating to `http://localhost:5713` for local server execution and `http://localhost:8080` for Docker execution
+- Open React.js UI by navigating to `http://localhost:5713` for local server execution and `http://localhost:8080` for Docker
 - Use Signup button to sign up with a unique username(alphanumeric and length[5,10] constraints) and password(length[8,20] constraint)
 - After redirection back to login page, login and use the "Add Note" button to open the new note field and add a new note
 - The user's note list is automatically refreshed at login time (after dashboard has loaded) and after creating a new note
@@ -99,22 +109,17 @@ A simple app to allow users to save notes and view them later. It can be easily 
 
 ## Testing the Frontend UI ##
 - Use `npm run test:frontend` from root terminal to run Playwright UI test (Playwright will automatically create a server to test)
-- Tests are for confirming signup flow and verifying presence of fields in login and signup pages.
+- Tests are for confirming signup flow and verifying presence of fields in login and signup pages
  
 ## Run Backend and Frontend Servers ##
-- Run both servers from `run_app.bat` batch file
-- Vite server renders React.js on `localhost:5173`
+- If NPM is installed, the app can be run via `npm run app:local` and `npm run app:local-test` for normal ops and tests respectively
+- Alternatively both servers from `run_app.bat` and `run_app_test.bat` batch file. These are the files used by the NPM scripts as well
+- Finally, scripts can also be used to build and run Docker containers in either dev or prod configs as well:
+  - Use `npm run docker:dev-build` to rebuild and start the container in dev-mode. Use only `npm run docker:dev` to run existing image
+  - Use `npm run docker:prod` and `npm run docker:prod-build`for the same in prod-mode
+- Vite server renders React.js on `localhost:5173` if running locally
+- If running via Docker, NGINX server will be available on `localhost:8080`
 - Flask API server runs on `localhost:5000`
-
-## Docker
-- Alternatively, you can run the entire app via Docker.
-- Install Docker Engine and Docker Compose CLI Plugin:
-  - Windows has several apps available that do everything at once. For example, Docker Desktop; go to `https://www.docker.com/` to download and install Docker Desktop
-  - Linux users just need the `docker -ce` and `docker-compose-plugin` packages to get it working
-- Confirm Docker is installed via `docker  --version`
-- Once confirmed, run the compose build via `docker-compose up --build` from the project root
-- The Dockerized app runs on Nginx instead of Vite, so the UI will be available on `localhost:8080` if running via Docker
-- As of the moment, the test suite hasn't been included into the compose orchestration for build validation
 
 ## Future Plans ##
 - Switch Database from SQLite3 to PostGreSQL (Easier now that SQLAlchemy is used to decouple backend API from database platform)
