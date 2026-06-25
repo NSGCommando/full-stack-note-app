@@ -20,7 +20,7 @@ def hash_passwords(password_passed:str)->str:
     """Wrapper to generate and return password hash.
     Currently uses scrypt with work factor of 600,000 from werkzeug for production.
     Uses PBKDF2 with work factor of only 1000 to test database bottlenecking"""
-    if os.getenv('TESTING_MODE') == 'True':
+    if os.getenv('TESTING_MODE') == "1":
         password_hashed = generate_password_hash(password_passed, method='pbkdf2:sha256:1000')
     else:
         # Production gets full security

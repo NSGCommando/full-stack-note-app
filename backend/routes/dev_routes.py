@@ -9,7 +9,7 @@ dev_router = Blueprint('DevRouter', __name__, url_prefix='/dev')
 
 @dev_router.route("/test/reset-db",methods=["POST"])
 def reset_db():
-    if os.getenv("TESTING_MODE") != "True":
+    if os.getenv("TESTING_MODE") != "1":
         abort(403)
     initialize_database(test_mode=True)
     dev_route_logger.info("Test database successfully reset")
@@ -17,8 +17,12 @@ def reset_db():
 
 @dev_router.route("/test/shutdown-db",methods=["POST"])
 def shutdown_db():
-    if os.getenv("TESTING_MODE") != "True":
+    if os.getenv("TESTING_MODE") != "1":
         abort(403)
     shutdown_sessions()
     dev_route_logger.info("Test database successfully shutdown")
     return jsonify({"message":"shutdown successful"}), 200
+
+@dev_router.route("/health", methods=["GET"])
+def health():
+    return jsonify({"status":"ok"}), 200

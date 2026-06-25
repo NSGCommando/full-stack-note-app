@@ -16,7 +16,7 @@ frontend_header = bc.CustomHeaders.CUSTOM_HEADER_FRONTEND.value
 frontend_header_response = bc.CustomHeaders.CUSTOM_HEADER_FRONTEND_RESPONSE.value
 application = Flask(__name__) # expose the app
 # set up logging
-if os.getenv("TESTING_MODE") == "True":
+if os.getenv("TESTING_MODE") == "1":
     app_logger= get_project_logger(module_name=__name__,level=logging.DEBUG)
     app_logger.warning("WARNING: USING TEST DATABASE")
 else:

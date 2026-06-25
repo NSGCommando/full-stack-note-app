@@ -154,7 +154,7 @@ def data_conn(f):
             return jsonify({"error": "Unauthorised Access"}), 403 # reject the request if the custom header value is wrong
         
         # test path management
-        if os.getenv('TESTING_MODE') == 'True':
+        if os.getenv("TESTING_MODE") == "1":
             path=test_path # ensure testing path is included
         else:
             path=db_path

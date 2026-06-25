@@ -11,5 +11,5 @@ api_composer = Blueprint('Api', __name__, url_prefix='/api')
 api_composer.register_blueprint(admin_router)
 api_composer.register_blueprint(user_router)
 api_composer.register_blueprint(all_router)
-if os.getenv("TESTING_MODE") == "True":
+if os.getenv("TESTING_MODE") == "1":
     api_composer.register_blueprint(dev_router)
