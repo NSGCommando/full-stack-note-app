@@ -1,6 +1,6 @@
 @echo off
 REM: Set environment variables
-set TESTING_MODE=True
+set TESTING_MODE=1
 set FLASK_DEBUG=1
 set PYTHONPATH=.
 

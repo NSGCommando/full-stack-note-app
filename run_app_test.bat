@@ -1,6 +1,6 @@
 @echo off
 REM: Works only for Windows, for now
-set TESTING_MODE=True
+set TESTING_MODE=1
 set FLASK_DEBUG=1
 set PYTHONPATH=.
 REM: Start Backend (Flask) server in new terminal:
