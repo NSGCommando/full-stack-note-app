@@ -44,7 +44,7 @@ function TableFactory({dataList, id, ...props}){
                                 {/* don't allow admins to delete admins*/}
                                 {!entry.is_admin?
                                     (
-                                    <button className="user-delete-button" onClick={()=>props.deleteEntry(entry.id)}>
+                                    <button className="table-delete-button" onClick={()=>props.deleteEntry(entry.id)}>
                                     Delete
                                     </button>
                                     ):

@@ -1,4 +1,4 @@
-.user-delete-button{
+.table-delete-button{
     background-color: #2a1d1d;
     color: white;
     border: none;
@@ -8,7 +8,7 @@
     cursor: pointer;
     transition: opacity 0.2s;
 }
-.user-delete-button:hover{
+.table-delete-button:hover{
     background-color: black;
 }
 
