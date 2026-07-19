@@ -48,8 +48,8 @@ def session_manager():
 def gen_good_data():
     """Fixture to generate valid user data"""
     # invalid usernames and passwords
-    username = generate_random_username_valid() # 2 bytes(16 bits) random, 4 bits are 1 hexadecimal number, total 4 randoms
-    password = f"test_password{os.urandom(2).hex()}" 
+    username = generate_random_username_valid() 
+    password = f"test_password{os.urandom(2).hex()}" # 2 bytes(16 bits) random, 4 bits are 1 hexadecimal number, total 4 randoms
     yield {
         "username":username,
         "password":password,
