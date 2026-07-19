@@ -1,7 +1,8 @@
-import {useState,useEffect,useRef} from "react";
+import {useState,useCallback} from "react";
 import { useNavigate } from "react-router-dom";
 import { customHeader } from "../utils/authUtils";
 import { decideHost } from "../utils/utilFuncs";
+import {useUserNotesLoadOnce} from "../hooks/useUserNotesLoadOnce"
 import TextInput from "../components/TextInput";
 import SubmitButton from "../components/SubmitButton";
 import TableFactory from "../components/TableFactory";
@@ -14,15 +15,12 @@ function UserDashboard({user,setUser}){
     const [error, setError] = useState("");
     const [showNoteInput, setShowNoteInput] = useState(false);
     const [newNote, setNewNote] = useState("");
-    const fetchOnLogin = useRef(false);
 
-    // load pre-existing notes list on user confirmation once after login
-    useEffect(() => {
-        if(user && !user.is_admin && !fetchOnLogin.current) {
-            handleNotesRefresh();
-            fetchOnLogin.current = true; // Use a reference to main initial note-loading idempotent to retries
-        }
-        }, [user]); // run once on user state change
+    // This callback is created on component mount and used throughout the lifecycle
+    const notesRefresherCallback = useCallback(()=>{
+        handleNotesRefresh();
+    },[]);
+    useUserNotesLoadOnce(user,notesRefresherCallback); // Hook to load pre-existing notes list on user confirmation once after login
 
     // navigate hook
     const navigateObject = useNavigate();
@@ -48,7 +46,7 @@ function UserDashboard({user,setUser}){
         }
     }
 
-    // Create New Note function
+    // Create New Note function -  this displays the note creation form
     async function handleShowNoteInput(){setShowNoteInput(true)}
 
     // Add Notes function
