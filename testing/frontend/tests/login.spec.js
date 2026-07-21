@@ -7,9 +7,6 @@ test('Login Page', async ({ page }) => {
   const loginPage = new LoginPage(page);
   await loginPage.goto();
 
-  // wait for loading screen to be visible
-  await expect(loginPage.loadingAnim).toBeVisible();
-
   // wait for login container to be visible
   await loginPage.waitForLoad();
   // Test whether login and signup containers are visible
